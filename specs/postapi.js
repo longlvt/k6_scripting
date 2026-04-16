@@ -3,7 +3,10 @@ import { sleep, check } from 'k6'
 
 export const options= {
     vus: 1,
-    duration: '2s'
+    duration: '30s',
+    thresholds: {
+        http_req_duration: ['p(90)<450']
+    }
 }
 
 export default function() {
@@ -22,7 +25,7 @@ export default function() {
 
     check(res, {
         'response code was 200': (res) => res.status == 200,
-        'does username exist in response body': (res) => Object.hasOwn(JSON.parse(res.body), 'username1')
+        'does username exist in response body': (res) => Object.hasOwn(JSON.parse(res.body), 'username')
     })
 
     // const bodyJSON = JSON.parse(res.body)
